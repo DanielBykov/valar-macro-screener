@@ -9,7 +9,8 @@ inputs, and an AI-generated *Analyst Note* explains the *why* behind each readin
 
 🔗 **Live:** https://valar-macro-screener.vercel.app
 
-<!-- Add a dashboard screenshot here — it's the single highest-impact thing for a first impression. -->
+![dashboard-1.png](dashboard-1.png)
+![dashboard-2.png](dashboard-2.png)
 
 ## Why it's non-trivial
 

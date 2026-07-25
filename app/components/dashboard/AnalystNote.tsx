@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sparkles } from "lucide-react";
+import { ChevronDown, Sparkles } from "lucide-react";
 import { toNYDateString } from "./utils";
 
 type Narrative = {
@@ -19,6 +19,7 @@ type Narrative = {
 export function AnalystNote({ date }: { date: Date }) {
   const [note, setNote] = useState<Narrative | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -40,7 +41,7 @@ export function AnalystNote({ date }: { date: Date }) {
     };
   }, [date]);
 
-  if (isLoading) return <AnalystNoteSkeleton />;
+  if (isLoading) return <AnalystNoteCollapsedShell />;
   if (!note) return null;
 
   const paragraphs = note.narrative.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
@@ -48,48 +49,74 @@ export function AnalystNote({ date }: { date: Date }) {
 
   return (
     <div className="bg-surface-raised border border-border-subtle rounded-xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-border-subtle flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-accent-blue" />
-          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">AI Analyst Note</h2>
+      <button
+        type="button"
+        onClick={() => setIsOpen((v) => !v)}
+        aria-expanded={isOpen}
+        className="w-full px-6 py-4 flex items-center justify-between gap-3 text-left hover:bg-surface-overlay/40 transition-colors cursor-pointer"
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <Sparkles className="h-4 w-4 text-accent-blue shrink-0" />
+          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider shrink-0">AI Analyst Note</h2>
+          {!isOpen && (
+            <span className="text-[13px] text-text-secondary truncate ml-2 normal-case tracking-normal font-normal">
+              {note.headline}
+            </span>
+          )}
         </div>
-        <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider border border-border-subtle rounded px-1.5 py-0.5">
-          AI Generated
-        </span>
-      </div>
-
-      <div className="px-6 py-5 space-y-4">
-        <p className="text-[15px] font-semibold text-text-primary leading-snug">{note.headline}</p>
-        <div className="space-y-3">
-          {paragraphs.map((p, i) => (
-            <p key={i} className="text-[13px] text-text-secondary leading-relaxed">
-              {p}
-            </p>
-          ))}
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider border border-border-subtle rounded px-1.5 py-0.5">
+            AI Generated
+          </span>
+          <ChevronDown
+            className={`h-4 w-4 text-text-secondary transition-transform ${isOpen ? "rotate-180" : ""}`}
+          />
         </div>
-      </div>
+      </button>
 
-      <div className="px-6 py-3 border-t border-border-subtle flex items-center gap-2">
-        <span className="text-[11px] font-mono text-text-secondary">
-          {note.model} · {generatedLabel}
-        </span>
-      </div>
+      {isOpen && (
+        <>
+          <div className="px-6 py-5 space-y-4 border-t border-border-subtle">
+            <p className="text-[15px] font-semibold text-text-primary leading-snug">{note.headline}</p>
+            <div className="space-y-3">
+              {paragraphs.map((p, i) => (
+                <p key={i} className="text-[13px] text-text-secondary leading-relaxed">
+                  {p}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <div className="px-6 py-3 border-t border-border-subtle flex items-center gap-2">
+            <span className="text-[11px] font-mono text-text-secondary">
+              {note.model} · {generatedLabel}
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
-function AnalystNoteSkeleton() {
+/**
+ * Placeholder matching the collapsed card's exact height so the note arriving
+ * (or turning out to be absent) doesn't shift surrounding layout.
+ */
+function AnalystNoteCollapsedShell() {
   return (
-    <div className="bg-surface-raised border border-border-subtle rounded-xl overflow-hidden animate-pulse">
-      <div className="px-6 py-4 border-b border-border-subtle flex items-center gap-2">
-        <Sparkles className="h-4 w-4 text-text-secondary" />
-        <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wider">AI Analyst Note</h2>
-      </div>
-      <div className="px-6 py-5 space-y-3">
-        <div className="h-4 w-2/3 rounded bg-surface-overlay" />
-        <div className="h-3 w-full rounded bg-surface-overlay" />
-        <div className="h-3 w-full rounded bg-surface-overlay" />
-        <div className="h-3 w-4/5 rounded bg-surface-overlay" />
+    <div className="bg-surface-raised border border-border-subtle rounded-xl overflow-hidden">
+      <div className="w-full px-6 py-4 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <Sparkles className="h-4 w-4 text-text-secondary shrink-0" />
+          <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wider shrink-0">AI Analyst Note</h2>
+          <div className="h-3 w-64 max-w-full rounded bg-surface-overlay animate-pulse ml-2" />
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider border border-border-subtle rounded px-1.5 py-0.5">
+            AI Generated
+          </span>
+          <ChevronDown className="h-4 w-4 text-text-secondary" />
+        </div>
       </div>
     </div>
   );
