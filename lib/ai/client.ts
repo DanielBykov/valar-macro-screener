@@ -7,7 +7,7 @@ import Anthropic from "@anthropic-ai/sdk";
  */
 export const anthropic = new Anthropic();
 
-export const NARRATIVE_MODEL = "claude-opus-4-8";
+export const NARRATIVE_MODEL = "claude-haiku-4-5";
 
 export function isNarrativeConfigured(): boolean {
   return Boolean(process.env.ANTHROPIC_API_KEY);

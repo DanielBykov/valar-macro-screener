@@ -77,7 +77,9 @@ export async function getRegimeNarrative(
     const res = await anthropic.messages.parse({
       model: NARRATIVE_MODEL,
       max_tokens: 3000,
-      thinking: { type: "adaptive" },
+      // Haiku 4.5 supports neither adaptive thinking nor the effort parameter;
+      // a moderate token budget is the "medium effort" equivalent it does support.
+      thinking: { type: "enabled", budget_tokens: 1500 },
       system: [
         { type: "text", text: NARRATIVE_SYSTEM, cache_control: { type: "ephemeral" } },
       ],
