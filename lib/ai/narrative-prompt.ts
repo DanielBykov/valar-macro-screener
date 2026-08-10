@@ -50,5 +50,8 @@ export function inputHash(s: SnapshotResult): string {
       m: b.indicators.map((i) => [i.indicatorKey, i.score] as const),
     })),
   };
-  return createHash("sha256").update(JSON.stringify(payload)).digest("hex").slice(0, 16);
+  return createHash("sha256")
+      .update(JSON.stringify(payload))
+      .digest("hex")
+      .slice(0, 16);
 }

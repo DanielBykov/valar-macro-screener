@@ -58,4 +58,4 @@ enable AI analyst notes (optional — the app degrades gracefully without it).
 ## Documentation
 
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** — full developer reference: data model, engine
-  internals, every file, and the complete API surface.
+  internals, every file, and the complete API surface. 
