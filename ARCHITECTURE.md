@@ -12,7 +12,7 @@ A macroeconomic intelligence dashboard that computes and displays a Macro Pulse 
 - **Database**: PostgreSQL with Drizzle ORM
 - **API**: Next.js Route Handlers (`app/api/`)
 - **Data source**: FRED API (cached) + analyst manual inputs
-- **AI**: Anthropic SDK (Claude Opus 4.8) for narrative generation
+- **AI**: Anthropic SDK (Claude Haiku 4.5, chosen for cost) for narrative generation
 
 ## Data Model (`shared/schema.ts`)
 - `snapshots` — Main snapshot record (date, total score, regime, comparisons, interpretation)
@@ -44,17 +44,15 @@ A macroeconomic intelligence dashboard that computes and displays a Macro Pulse 
 
 ## AI Narrative Layer (`lib/ai/`)
 Read-only, fail-safe consumer of the engine output.
-- `client.ts` — Shared Anthropic client (model `claude-opus-4-8`); best-effort init, does not throw if `ANTHROPIC_API_KEY` is missing
-- `narrative.ts` — `getRegimeNarrative()` orchestrator; read-through cache (serve on hit, generate + cache on miss), structured output via Zod, prompt caching, returns `null` on failure
+- `client.ts` — Shared Anthropic client (model `claude-haiku-4-5`); best-effort init, does not throw if `ANTHROPIC_API_KEY` is missing
+- `narrative.ts` — `getRegimeNarrative()` orchestrator; read-through cache (serve on hit, generate + cache on miss), structured output via Zod, prompt caching; returns a typed `NarrativeOutcome` (`ok` / `disabled` / `error` with a classified reason); never throws on an API failure
 - `narrative-prompt.ts` — System prompt + `serializeSnapshot()` (compact deterministic text) + `inputHash()` (SHA-256 over scores only, timestamps excluded)
 - `narrative-repo.ts` — Load/store cached narratives (`snapshotNarratives`)
 
 ## Key Files
 - `shared/schema.ts` — Drizzle schema definitions and types
 - `lib/db.ts` — PostgreSQL connection pool
-- `lib/storage.ts` — `DatabaseStorage` implementing `IStorage` (CRUD for snapshots/blocks/metrics/trends)
 - `lib/auth.ts` — Session token create/verify (HMAC-SHA256, 7-day TTL) + `requireAuth`
-- `lib/seed.ts` — Seeds the mock snapshot (idempotent)
 - `lib/utils.ts` — `cn()` className utility
 - `lib/fred/fetcher.ts` — FRED API client (fetch + cache observations)
 - `lib/fred/series-catalog.ts` — Catalog of FRED series used by scorers

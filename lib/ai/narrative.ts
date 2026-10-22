@@ -19,7 +19,7 @@ const NarrativeSchema = z.object({
     .describe("One line, <=90 chars, naming the regime and its prime driver. No trailing period."),
   narrative: z
     .string()
-    .describe("2-3 short paragraphs of markdown. No preamble, headings, or bullet lists."),
+    .describe("One short paragraph of markdown. No preamble, headings, or bullet lists."),
 });
 
 export type RegimeNarrative = {

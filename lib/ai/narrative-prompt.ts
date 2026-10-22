@@ -14,7 +14,7 @@ Rules:
 - Ground every claim in the numbers provided. Never invent a metric, block, or value that is not in the input.
 - Lead with the regime and what is driving it. Then the sharpest cross-block divergence or tension. Then the main risk to watch.
 - No preamble ("Here is...", "Based on..."), no bullet lists, no headings, no emoji.
-- Institutional desk tone: direct, specific, quantitative. 1 short paragraphs.`;
+- Institutional desk tone: direct, specific, quantitative. One short paragraph.`;
 
 /**
  * Render a SnapshotResult into the compact, deterministic text the model reads.
