@@ -1,0 +1,10 @@
+{
+  "prompts": {
+    "ed1d94c6-57b9-4bc9-9ed5-5ba08be78317": {
+      "id": "ed1d94c6-57b9-4bc9-9ed5-5ba08be78317",
+      "name": "Timeline Update",
+      "content": "You are updating the dev progress timeline at docs/dashboard-dev/Timeline.md. Your job is to add new entries based on recent git history.\n\nSteps:\n\nRead the current docs/dashboard-dev/Timeline.md to understand the format and find the last date covered.\nRun git log --since\u003d\"\u003clast date in timeline\u003e\" --pretty\u003dformat:\"%h %ad %s\" --date\u003dshort --no-merges to get new commits.\nIf there are no new commits beyond what\u0027s already in the timeline, say so and stop.\nFor each new date that has commits, run git show \u003chash\u003e --stat --format\u003d\"%B\" for every commit on that date to understand what changed.\nGroup commits by date. Within each date, merge related commits into a single bullet when they clearly belong together (e.g. a feature + its refactor on the same day).\nWrite each entry following this exact format:\n## \u003cMonth Day, Year\u003e\n- **\u003cShort bold title\u003e**\n  \u003cPlain-language description of what was done and why. 1–3 sentences. Mention key files, APIs, or components only when they add clarity. No commit hashes.\u003e\n\nRules:\n\nWrite in past tense, plain language — as if explaining to a stakeholder, not a machine.\nDon\u0027t repeat information already in the timeline.\nDon\u0027t add ticket references or status fields unless you find them in the commit messages.\nKeep descriptions concise but specific — name the actual features, endpoints, components, or patterns involved.\nPreserve all existing content in the file. Only append new date sections at the bottom.",
+      "createdAt": 1780012500852
+    }
+  }
+}
